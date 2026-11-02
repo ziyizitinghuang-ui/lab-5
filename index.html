@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rainy Window</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main>
+    <h1>Rainy Window</h1>
+    <p>Drag to clear the fog. Click the right handle to open the window.</p>
+
+    <div class="scene">
+      <div class="city"></div>
+
+      <div class="pane left">
+        <div class="glass">
+          <canvas></canvas>
+        </div>
+        <img src="images/window-left.png" alt="Left window">
+      </div>
+
+      <div class="pane right" id="right">
+        <div class="glass">
+          <canvas></canvas>
+        </div>
+        <img src="images/window-right.png" alt="Right window">
+        <button class="handle" id="handle" aria-label="Toggle window"></button>
+      </div>
+
+      <img class="frame" src="images/window-frame.png" alt="Window frame">
+    </div>
+
+    <div class="controls">
+      <button id="reset">Restore Fog</button>
+      <button id="toggle">Open Window</button>
+    </div>
+  </main>
+</body>
+</html>
