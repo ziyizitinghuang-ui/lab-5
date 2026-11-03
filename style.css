@@ -34,17 +34,22 @@ p {
 .scene {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 1536 / 1024;
   perspective: 1400px;
   isolation: isolate;
 }
 
+
 .city {
   position: absolute;
-  inset: 3% 3% 3%;
+  top: 6%;
+  bottom: 6%;
+  left: 12%;
+  right: 12%;
   background: url("images/city.png") center / cover no-repeat;
   filter: brightness(.82);
 }
+
 
 .frame {
   position: absolute;
@@ -57,21 +62,21 @@ p {
 
 .pane {
   position: absolute;
-  top: 0;
-  height: 100%;
+  top: 5.664%;
+  height: 88.867%;
   transform-style: preserve-3d;
   transition: transform 1.1s ease;
 }
 
 .left {
-  left: 0;
-  width: 50%;
+  left: 11.198%;
+  width: 38.867%;
   z-index: 2;
 }
 
 .right {
-  left: 50%;
-  width: 50%;
+  left: 50.065%;
+  width: 38.737%;
   transform-origin: right center;
   z-index: 3;
 }
@@ -91,13 +96,21 @@ p {
 
 .glass {
   position: absolute;
-  top: 10.5%;
-  bottom: 10.5%;
-  left: 13%;
-  right: 13%;
-  background: rgba(198, 207, 210, .075);
+  top: 5.7%;
+  bottom: 5.8%;
   overflow: hidden;
+  background: rgba(198, 207, 210, .075);
   z-index: 1;
+}
+
+.left .glass {
+  left: 9%;
+  right: 11.7%;
+}
+
+.right .glass {
+  left: 11.8%;
+  right: 8.9%;
 }
 
 canvas {
