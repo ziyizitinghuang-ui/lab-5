@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,12 +7,39 @@
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
+
 <body>
-  <main>
+
+  <div class="welcome" id="welcome">
+    <div class="welcome-content">
+      <div class="rain-symbol">☂</div>
+
+      <h1 class="welcome-title">Rainy Window</h1>
+
+      <p class="welcome-description">
+        Some nights are meant to be spent by the window.
+      </p>
+
+      <button id="enter" class="enter-button">
+        Enter the Room
+      </button>
+
+      <p class="welcome-hint">
+        Best experienced with sound
+      </p>
+    </div>
+  </div>
+
+  <main id="main">
+
     <h1>Rainy Window</h1>
-    <p>Drag to clear the fog. Click the right handle to open the window.</p>
+
+    <p>
+      Drag to clear the fog. Click the right handle to open the window.
+    </p>
 
     <div class="scene">
+
       <div class="city"></div>
 
       <div class="pane left">
@@ -28,10 +54,19 @@
           <canvas></canvas>
         </div>
         <img src="images/window-right.png" alt="Right window">
-        <button class="handle" id="handle" aria-label="Toggle window"></button>
+
+        <button
+          class="handle"
+          id="handle"
+          aria-label="Toggle window">
+        </button>
       </div>
 
-      <img class="frame" src="images/window-frame.png" alt="Window frame">
+      <img
+        class="frame"
+        src="images/window-frame.png"
+        alt="Window frame">
+
     </div>
 
     <div class="controls">
@@ -39,7 +74,15 @@
       <button id="toggle">Open Window</button>
     </div>
 
-    <audio id="ambience" src="audio/ambience.mp3" loop preload="auto"></audio>
+    <audio
+      id="ambience"
+      src="audio/ambience.mp3"
+      loop
+      preload="auto">
+    </audio>
+
   </main>
+
 </body>
 </html>
+
