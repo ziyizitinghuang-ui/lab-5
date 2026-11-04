@@ -1,6 +1,9 @@
 const right = document.querySelector("#right");
 const toggle = document.querySelector("#toggle");
+const handle = document.querySelector("#handle");
+
 const canvases = document.querySelectorAll(".fog-canvas");
+
 const ambience = document.querySelector("#ambience");
 
 const welcome = document.querySelector("#welcome");
@@ -11,50 +14,57 @@ const rainCanvas = document.querySelector("#rain-canvas");
 const rainCtx = rainCanvas.getContext("2d");
 
 let opened = false;
-let audioStarted = false;
-let fadeTimer;
 let entered = false;
 
+let volumeAnimation = null;
 
 ambience.volume = 0;
 
 function startAudio() {
-  if (audioStarted) return;
+  if (!ambience.paused) return;
 
-  ambience.play().then(() => {
-    audioStarted = true;
-  }).catch(error => {
+  ambience.play().catch(error => {
     console.log("Audio playback failed:", error);
   });
 }
 
 function fadeVolume(target, duration = 1200) {
-  clearInterval(fadeTimer);
+  if (volumeAnimation !== null) {
+    cancelAnimationFrame(volumeAnimation);
+  }
 
-  const start = ambience.volume;
-  const steps = 25;
-  const interval = duration / steps;
+  const startVolume = ambience.volume;
+  const startTime = performance.now();
 
-  let step = 0;
+  function animateVolume(time) {
+    const progress = Math.min(
+      (time - startTime) / duration,
+      1
+    );
 
-  fadeTimer = setInterval(() => {
-    step++;
-
-    const progress = Math.min(step / steps, 1);
+    const eased =
+      progress * progress * (3 - 2 * progress);
 
     ambience.volume = Math.max(
       0,
       Math.min(
         1,
-        start + (target - start) * progress
+        startVolume + (target - startVolume) * eased
       )
     );
 
-    if (step >= steps) {
-      clearInterval(fadeTimer);
+    if (progress < 1) {
+      volumeAnimation =
+        requestAnimationFrame(animateVolume);
+    } else {
+      volumeAnimation = null;
     }
-  }, interval);
+  }
+
+  volumeAnimation =
+    requestAnimationFrame(animateVolume);
 }
+
 
 
 function enterRoom() {
@@ -91,17 +101,21 @@ function switchWindow() {
     ? "Close Window"
     : "Open Window";
 
+  handle.setAttribute(
+    "aria-label",
+    opened ? "Close window" : "Open window"
+  );
+
   fadeVolume(opened ? 0.9 : 0.45);
 }
 
 toggle.addEventListener("click", switchWindow);
+handle.addEventListener("click", switchWindow);
 
-document
-  .querySelector("#handle")
-  .addEventListener("click", switchWindow);
 
 let raindrops = [];
 let rainRunning = false;
+
 let rainWidth = 0;
 let rainHeight = 0;
 let lastRainTime = 0;
@@ -110,17 +124,24 @@ function createRaindrop() {
   return {
     x: Math.random() * rainWidth,
     y: Math.random() * rainHeight,
+
     length: 8 + Math.random() * 17,
     speed: 190 + Math.random() * 220,
+
     opacity: 0.12 + Math.random() * 0.25,
     width: 0.5 + Math.random() * 0.45,
+
     drift: -0.12 - Math.random() * 0.2
   };
 }
 
 function resizeRain() {
   const rect = rainCanvas.getBoundingClientRect();
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+  const dpr = Math.min(
+    window.devicePixelRatio || 1,
+    2
+  );
 
   rainWidth = rect.width;
   rainHeight = rect.height;
@@ -128,7 +149,9 @@ function resizeRain() {
   rainCanvas.width = Math.round(rainWidth * dpr);
   rainCanvas.height = Math.round(rainHeight * dpr);
 
-  rainCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  rainCtx.setTransform(
+    dpr, 0, 0, dpr, 0, 0
+  );
 
   raindrops = Array.from(
     { length: 190 },
@@ -145,7 +168,12 @@ function drawRain(time) {
 
   lastRainTime = time;
 
-  rainCtx.clearRect(0, 0, rainWidth, rainHeight);
+  rainCtx.clearRect(
+    0,
+    0,
+    rainWidth,
+    rainHeight
+  );
 
   const intensity = opened ? 1.35 : 1;
 
@@ -153,7 +181,9 @@ function drawRain(time) {
 
   raindrops.forEach(drop => {
     drop.y += drop.speed * delta;
-    drop.x += drop.drift * drop.speed * delta;
+
+    drop.x +=
+      drop.drift * drop.speed * delta;
 
     if (drop.y > rainHeight + drop.length) {
       drop.y = -drop.length;
@@ -167,10 +197,9 @@ function drawRain(time) {
     rainCtx.beginPath();
 
     rainCtx.strokeStyle =
-      `rgba(205, 219, 228, ${Math.min(
-        drop.opacity * intensity,
-        0.65
-      )})`;
+      `rgba(205, 219, 228, ${
+        Math.min(drop.opacity * intensity, 0.65)
+      })`;
 
     rainCtx.lineWidth = drop.width;
 
@@ -191,6 +220,7 @@ function startRain() {
   if (rainRunning) return;
 
   resizeRain();
+
   rainRunning = true;
   lastRainTime = 0;
 
@@ -198,12 +228,13 @@ function startRain() {
 }
 
 window.addEventListener("resize", () => {
-  if (rainRunning) resizeRain();
+  if (rainRunning) {
+    resizeRain();
+  }
 });
 
 
-
-function createFog(canvas) {
+function drawFog(canvas) {
   const w = 500;
   const h = 780;
 
@@ -239,6 +270,7 @@ function createFog(canvas) {
     );
 
     ctx.fillStyle = gradient;
+
     ctx.fillRect(
       x - r,
       y - r,
@@ -273,18 +305,36 @@ function createFog(canvas) {
   for (let i = 0; i < 650; i++) {
     const x = Math.random() * w;
     const y = Math.random() * h;
-    const radius = 0.3 + Math.random() * 1.1;
+
+    const radius =
+      0.3 + Math.random() * 1.1;
 
     ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
+
+    ctx.arc(
+      x,
+      y,
+      radius,
+      0,
+      Math.PI * 2
+    );
 
     ctx.fillStyle =
-      `rgba(245, 248, 247, ${0.035 + Math.random() * 0.09})`;
+      `rgba(245, 248, 247, ${
+        0.035 + Math.random() * 0.09
+      })`;
 
     ctx.fill();
   }
 
   ctx.globalCompositeOperation = "destination-out";
+}
+
+
+function initializeFog(canvas) {
+  drawFog(canvas);
+
+  const ctx = canvas.getContext("2d");
 
   let drawing = false;
   let previous = null;
@@ -327,18 +377,18 @@ function createFog(canvas) {
     );
   }
 
-  function wipe(e) {
+  function wipe(event) {
     if (!drawing || !entered) return;
 
     const rect = canvas.getBoundingClientRect();
 
     const x =
-      (e.clientX - rect.left) /
-      rect.width * w;
+      (event.clientX - rect.left) /
+      rect.width * canvas.width;
 
     const y =
-      (e.clientY - rect.top) /
-      rect.height * h;
+      (event.clientY - rect.top) /
+      rect.height * canvas.height;
 
     if (previous) {
       const distance = Math.hypot(
@@ -366,36 +416,44 @@ function createFog(canvas) {
     previous = { x, y };
   }
 
-  canvas.onpointerdown = e => {
+  canvas.addEventListener("pointerdown", event => {
     if (!entered) return;
 
     if (
       opened &&
       canvas.closest(".right")
-    ) return;
+    ) {
+      return;
+    }
 
     drawing = true;
     previous = null;
 
-    canvas.setPointerCapture(e.pointerId);
+    canvas.setPointerCapture(event.pointerId);
 
-    wipe(e);
-  };
+    wipe(event);
+  });
 
-  canvas.onpointermove = wipe;
+  canvas.addEventListener("pointermove", wipe);
 
-  canvas.onpointerup =
-  canvas.onpointercancel = () => {
+  function stopDrawing() {
     drawing = false;
     previous = null;
-  };
+  }
+
+  canvas.addEventListener("pointerup", stopDrawing);
+  canvas.addEventListener("pointercancel", stopDrawing);
+  canvas.addEventListener("lostpointercapture", stopDrawing);
 }
 
-canvases.forEach(createFog);
+canvases.forEach(initializeFog);
 
 
-document.querySelector("#reset").onclick = () => {
-  if (!entered) return;
+document.querySelector("#reset").addEventListener(
+  "click",
+  () => {
+    if (!entered) return;
 
-  canvases.forEach(createFog);
-};
+    canvases.forEach(drawFog);
+  }
+);

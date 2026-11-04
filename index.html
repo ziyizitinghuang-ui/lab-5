@@ -1,76 +1,71 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rainy Window</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
 
 <body>
-
   <div class="welcome" id="welcome">
     <div class="welcome-content">
       <div class="rain-symbol">☂</div>
-
       <h1 class="welcome-title">Rainy Window</h1>
-
-      <p class="welcome-description">
-        Some nights are meant to be spent by the window.
-      </p>
-
-      <button id="enter" class="enter-button">
-        Enter the Room
-      </button>
-
-      <p class="welcome-hint">
-        Best experienced with sound
-      </p>
+      <button id="enter" class="enter-button">Enter the Room</button>
+      <p class="welcome-hint">Best experienced with sound</p>
     </div>
   </div>
 
   <main id="main">
-
-    <h1>Rainy Window</h1>
-
-    <p>
-      Drag to clear the fog. Click the right handle to open the window.
-    </p>
+    <header class="page-header">
+      <h1>Rainy Window</h1>
+      <p>Drag to clear the fog. Click the right handle to open the window.</p>
+    </header>
 
     <div class="scene">
-
       <div class="city"></div>
-
       <canvas id="rain-canvas" aria-hidden="true"></canvas>
 
       <div class="pane left">
         <div class="glass">
           <canvas class="fog-canvas"></canvas>
         </div>
-        <img src="images/window-left.png" alt="Left window">
+        <img src="images/window-left.png" alt="" draggable="false">
       </div>
 
       <div class="pane right" id="right">
         <div class="glass">
           <canvas class="fog-canvas"></canvas>
         </div>
-
-        <img src="images/window-right.png" alt="Right window">
-
-        <button
-          class="handle"
-          id="handle"
-          aria-label="Toggle window">
-        </button>
+        <img src="images/window-right.png" alt="" draggable="false">
+        <button id="handle" class="handle" aria-label="Open window"></button>
       </div>
-      
-      <img
-        class="frame"
-        src="images/window-frame.png"
-        alt="Window frame">
 
+      <img class="frame" src="images/window-frame.png" alt="" draggable="false">
+
+      <div class="room-decor" aria-hidden="true">
+        <img class="curtain-image curtain-left-image"
+             src="images/curtain-left.png" alt="" draggable="false">
+
+        <img class="curtain-image curtain-right-image"
+             src="images/curtain-right.png" alt="" draggable="false">
+
+        <img class="windowsill-image"
+             src="images/windowsill.png" alt="" draggable="false">
+
+        <div class="lamp-decoration">
+          <div class="lamp-glow"></div>
+          <img class="lamp-image"
+               src="images/lamp.png" alt="" draggable="false">
+        </div>
+      </div>
     </div>
 
     <div class="controls">
@@ -78,14 +73,7 @@
       <button id="toggle">Open Window</button>
     </div>
 
-    <audio
-      id="ambience"
-      src="audio/ambience.mp3"
-      loop
-      preload="auto">
-    </audio>
-
+    <audio id="ambience" src="audio/ambience.mp3" loop preload="auto"></audio>
   </main>
-
 </body>
 </html>
