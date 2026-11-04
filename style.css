@@ -157,6 +157,7 @@ main p {
   margin-bottom: 20px;
 }
 
+
 .scene {
   position: relative;
   width: 100%;
@@ -178,6 +179,23 @@ main p {
 
   filter: brightness(.82);
 }
+
+
+#rain-canvas {
+  position: absolute;
+
+  top: 6%;
+  bottom: 6%;
+  left: 12%;
+  right: 12%;
+
+  width: 76%;
+  height: 88%;
+
+  z-index: 1;
+  pointer-events: none;
+}
+
 
 .frame {
   position: absolute;
@@ -242,14 +260,13 @@ main p {
   right: 8.9%;
 }
 
-canvas {
+.fog-canvas {
   width: 100%;
   height: 100%;
   display: block;
   cursor: crosshair;
   touch-action: none;
 }
-
 
 
 .handle {

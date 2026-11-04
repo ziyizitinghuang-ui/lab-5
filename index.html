@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,17 +43,20 @@
 
       <div class="city"></div>
 
+      <canvas id="rain-canvas" aria-hidden="true"></canvas>
+
       <div class="pane left">
         <div class="glass">
-          <canvas></canvas>
+          <canvas class="fog-canvas"></canvas>
         </div>
         <img src="images/window-left.png" alt="Left window">
       </div>
 
       <div class="pane right" id="right">
         <div class="glass">
-          <canvas></canvas>
+          <canvas class="fog-canvas"></canvas>
         </div>
+
         <img src="images/window-right.png" alt="Right window">
 
         <button
@@ -61,7 +65,7 @@
           aria-label="Toggle window">
         </button>
       </div>
-
+      
       <img
         class="frame"
         src="images/window-frame.png"
@@ -85,4 +89,3 @@
 
 </body>
 </html>
-
