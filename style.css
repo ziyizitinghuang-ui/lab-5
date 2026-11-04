@@ -39,7 +39,6 @@ p {
   isolation: isolate;
 }
 
-
 .city {
   position: absolute;
   top: 6%;
@@ -49,7 +48,6 @@ p {
   background: url("images/city.png") center / cover no-repeat;
   filter: brightness(.82);
 }
-
 
 .frame {
   position: absolute;

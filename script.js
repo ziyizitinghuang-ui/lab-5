@@ -2,17 +2,53 @@
 const right = document.querySelector("#right");
 const toggle = document.querySelector("#toggle");
 const canvases = document.querySelectorAll("canvas");
+const ambience = document.querySelector("#ambience");
 
 let opened = false;
+let audioStarted = false;
+let fadeTimer;
+
+ambience.volume = 0.45;
+
+function startAudio() {
+  if (audioStarted) return;
+
+  ambience.play().then(() => {
+    audioStarted = true;
+  }).catch(() => {});
+}
+
+function fadeVolume(target) {
+  clearInterval(fadeTimer);
+
+  const start = ambience.volume;
+  let step = 0;
+
+  fadeTimer = setInterval(() => {
+    step++;
+
+    ambience.volume = Math.max(0, Math.min(1,
+      start + (target - start) * step / 25
+    ));
+
+    if (step >= 25) clearInterval(fadeTimer);
+  }, 48);
+}
 
 function switchWindow() {
+  startAudio();
+
   opened = !opened;
   right.classList.toggle("open", opened);
   toggle.textContent = opened ? "Close Window" : "Open Window";
+
+  fadeVolume(opened ? 0.9 : 0.45);
 }
 
 toggle.onclick = switchWindow;
 document.querySelector("#handle").onclick = switchWindow;
+
+document.addEventListener("pointerdown", startAudio);
 
 function createFog(canvas) {
   const w = 500;
@@ -70,6 +106,7 @@ function createFog(canvas) {
 
       for (let i = 1; i <= steps; i++) {
         const t = i / steps;
+
         brush(
           previous.x + (x - previous.x) * t,
           previous.y + (y - previous.y) * t
